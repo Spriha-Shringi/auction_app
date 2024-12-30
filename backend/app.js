@@ -20,13 +20,14 @@ config({
 
 // console.log(process.env.FRONTEND_URL);
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL ,
+const corsOptions = {
+    origin: ['https://auction-app-lime.vercel.app'],
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
-  })
+  }
 );
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -37,6 +38,10 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+app.get("/",(req, res)=>{
+  res.json("Hello");
+});
+
 app.use((req, res, next) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);
   next();
