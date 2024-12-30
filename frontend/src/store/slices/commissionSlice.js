@@ -24,7 +24,7 @@ export const postCommissionProof = (data) => async (dispatch) => {
   dispatch(commissionSlice.actions.postCommissionProofRequest());
   try {
     const response = await axios.post(
-      "https://auction-app-theta.vercel.app//api/v1/commission/proof",
+      "https://https://auction-app-theta.vercel.app/api/v1/commission/proof",
       data,
       {
         withCredentials: true,
