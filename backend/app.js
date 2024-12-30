@@ -24,8 +24,7 @@ const corsOptions = {
     origin: ['https://auction-app-lime.vercel.app'],
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
-  }
-);
+  };
 
 app.use(cors(corsOptions));
 
