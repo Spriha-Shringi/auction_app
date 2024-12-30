@@ -37,10 +37,10 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
-// app.use((req, res, next) => {
-//   console.log(`Incoming Request: ${req.method} ${req.url}`);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log(`Incoming Request: ${req.method} ${req.url}`);
+  next();
+});
 
 
 app.use("/api/v1/user", userRouter);
