@@ -172,15 +172,15 @@ export const fetchUser = () => async (dispatch) => {
     const response = await axios.get("http://localhost:5000/api/v1/user/me", {
       withCredentials: true,
     });
+    console.log(response.data); // For debugging
     dispatch(userSlice.actions.fetchUserSuccess(response.data.user));
-    dispatch(userSlice.actions.clearAllErrors());
+  dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.fetchUserFailed());
     dispatch(userSlice.actions.clearAllErrors());
-    console.error(error);
+    console.error(error.response?.data || error.message); // For debugging
   }
 };
-
 
 
 export const fetchLeaderboard = () => async (dispatch) => {
