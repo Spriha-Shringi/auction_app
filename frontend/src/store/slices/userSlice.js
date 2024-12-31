@@ -173,7 +173,13 @@ export const fetchUser = () => async (dispatch) => {
       withCredentials: true,
     });
     dispatch(userSlice.actions.fetchUserSuccess(response.data.user));
-
+  dispatch(userSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(userSlice.actions.fetchUserFailed());
+    dispatch(userSlice.actions.clearAllErrors());
+    console.error(error);
+  }
+};
 
 export const fetchLeaderboard = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchLeaderboardRequest());
