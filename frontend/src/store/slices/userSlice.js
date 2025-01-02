@@ -119,6 +119,8 @@ export const register = (data) => async (dispatch) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
+    const token = response.data.token; // Extract the token from the response
+    localStorage.setItem("token", token); // Save the token to localStorage
     dispatch(userSlice.actions.registerSuccess(response.data));
     toast.success(response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
@@ -140,7 +142,8 @@ export const login = (data) => async (dispatch) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(response.data);
+    const token = response.data.token; // Extract the token from the response
+    localStorage.setItem("token", token); // Save the token to localStorage
     dispatch(userSlice.actions.loginSuccess(response.data));
     toast.success(response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
@@ -152,11 +155,18 @@ export const login = (data) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
+  const token = localStorage.getItem("token");
   try {
+    
     const response = await axios.get(
       "https://auction-app-zm73.onrender.com/api/v1/user/logout",
-      { withCredentials: true }
+      { withCredentials: true ,
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token in the Authorization header
+        },
+      }
     );
+    localStorage.removeItem("token");
     dispatch(userSlice.actions.logoutSuccess());
     toast.success(response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
