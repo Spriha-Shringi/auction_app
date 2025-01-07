@@ -91,7 +91,7 @@ const userSlice = createSlice({
 //   dispatch(userSlice.actions.registerRequest());
 //   try {
 //     const response = await axios.post(
-//       "https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/register",
+//       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/register",
 //       data,
 //       {
 //         withCredentials: true,
@@ -112,7 +112,7 @@ export const register = (data) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
   try {
     const response = await axios.post(
-      "https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/register",
+      "https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/register",
       data,
       {
         withCredentials: true,
@@ -135,7 +135,7 @@ export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
     const response = await axios.post(
-      "https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/login",
+      "https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/login",
       data,
       {
         withCredentials: true,
@@ -159,7 +159,7 @@ export const logout = () => async (dispatch) => {
   try {
     
     const response = await axios.get(
-      "https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/logout",
+      "https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/logout",
       { withCredentials: true ,
         headers: {
           Authorization: `Bearer ${token}`, // Include token in the Authorization header
@@ -180,7 +180,7 @@ export const logout = () => async (dispatch) => {
 export const fetchUser = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchUserRequest());
   try {
-    const response = await axios.get("https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/me", {
+    const response = await axios.get("https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/me", {
       withCredentials: true,
     });
     console.log(response.data); // For debugging
@@ -198,7 +198,7 @@ export const fetchLeaderboard = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchLeaderboardRequest());
   try {
     const response = await axios.get(
-      "https://auction-r11rf714z-sprihashringis-projects.vercel.app/api/v1/user/leaderboard",
+      "https://auction-app-sprihashringis-projects.vercel.app/api/v1/user/leaderboard",
       {
         withCredentials: true,
       }
