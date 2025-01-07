@@ -6,7 +6,6 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 export const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
   const authHeader = req.headers.authorization; // Get the Authorization header
   let token;
-
   // Extract the token from the Authorization header if present
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
@@ -14,17 +13,13 @@ export const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
     // Fallback to cookies for backward compatibility
     token = req.cookies.token;
   }
-
   console.log("Token:", token); // Log token for debugging
-
   if (!token) {
     return next(new ErrorHandler("User not authenticated.", 400));
   }
-
   // Verify the token
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   req.user = await User.findById(decoded.id);
-
   next();
 });
 
