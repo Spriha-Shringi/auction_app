@@ -1,6 +1,10 @@
+// File: userSlice.js
+
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+
+const API_URL = "https://auction-app-zm73.onrender.com/api/v1";
 
 const userSlice = createSlice({
   name: "user",
@@ -11,7 +15,7 @@ const userSlice = createSlice({
     leaderboard: [],
   },
   reducers: {
-    registerRequest(state, action) {
+    registerRequest(state) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
@@ -21,12 +25,12 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload.user;
     },
-    registerFailed(state, action) {
+    registerFailed(state) {
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
     },
-    loginRequest(state, action) {
+    loginRequest(state) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
@@ -36,182 +40,127 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload.user;
     },
-    loginFailed(state, action) {
+    loginFailed(state) {
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
     },
-    fetchUserRequest(state, action) {
+    fetchUserRequest(state) {
       state.loading = true;
-      state.isAuthenticated = false;
-      state.user = {};
     },
     fetchUserSuccess(state, action) {
       state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload;
     },
-    fetchUserFailed(state, action) {
+    fetchUserFailed(state) {
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
     },
-
-    logoutSuccess(state, action) {
+    logoutSuccess(state) {
       state.isAuthenticated = false;
       state.user = {};
     },
-    logoutFailed(state, action) {
+    logoutFailed(state) {
       state.loading = false;
-      state.isAuthenticated = state.isAuthenticated;
-      state.user = state.user;
     },
-    fetchLeaderboardRequest(state, action) {
+    fetchLeaderboardRequest(state) {
       state.loading = true;
-      state.leaderboard = [];
     },
     fetchLeaderboardSuccess(state, action) {
       state.loading = false;
       state.leaderboard = action.payload;
     },
-    fetchLeaderboardFailed(state, action) {
+    fetchLeaderboardFailed(state) {
       state.loading = false;
       state.leaderboard = [];
     },
-    clearAllErrors(state, action) {
-      state.user = state.user;
-      state.isAuthenticated = state.isAuthenticated;
-      state.leaderboard = state.leaderboard;
+    clearAllErrors(state) {
       state.loading = false;
     },
   },
 });
 
-// export const register = (data) => async (dispatch) => {
-//   dispatch(userSlice.actions.registerRequest());
-//   try {
-//     const response = await axios.post(
-//       "https://auction-app-zm73.onrender.com/api/v1/user/register",
-//       data,
-//       {
-//         withCredentials: true,
-//         headers: { "Content-Type": "multipart/form-data" },
-//       }
-//     );
-//     dispatch(userSlice.actions.registerSuccess(response.data));
-//     toast.success(response.data.message);
-//     dispatch(userSlice.actions.clearAllErrors());
-//   } catch (error) {
-//     dispatch(userSlice.actions.registerFailed());
-//     const errorMsg = error.response?.data?.message || "Registration failed.";
-//     toast.error(errorMsg);
-//     dispatch(userSlice.actions.clearAllErrors());
-//   }
-// };
+// Helper: Get token from localStorage
+const getToken = () => localStorage.getItem("token");
+
+// Actions
+
 export const register = (data) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
   try {
-    const response = await axios.post(
-      "https://auction-app-zm73.onrender.com/api/v1/user/register",
-      data,
-      {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-    const token = response.data.token; // Extract the token from the response
-    localStorage.setItem("token", token); // Save the token to localStorage
+    const response = await axios.post(`${API_URL}/user/register`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    const token = response.data.token;
+    localStorage.setItem("token", token);
     dispatch(userSlice.actions.registerSuccess(response.data));
     toast.success(response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.registerFailed());
-    toast.error(error.response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
+    toast.error(error.response?.data?.message || "Registration failed.");
   }
 };
 
 export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
-    const response = await axios.post(
-      "https://auction-app-zm73.onrender.com/api/v1/user/login",
-      data,
-      {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    const token = response.data.token; // Extract the token from the response
-    localStorage.setItem("token", token); // Save the token to localStorage
+    const response = await axios.post(`${API_URL}/user/login`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    const token = response.data.token;
+    localStorage.setItem("token", token);
     dispatch(userSlice.actions.loginSuccess(response.data));
     toast.success(response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.loginFailed());
-    toast.error(error.response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
+    toast.error(error.response?.data?.message || "Login failed.");
   }
 };
 
 export const logout = () => async (dispatch) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   try {
-    
-    const response = await axios.get(
-      "https://auction-app-zm73.onrender.com/api/v1/user/logout",
-      { withCredentials: true ,
-        headers: {
-          Authorization: `Bearer ${token}`, // Include token in the Authorization header
-        },
-      }
-    );
+    const response = await axios.get(`${API_URL}/user/logout`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     localStorage.removeItem("token");
     dispatch(userSlice.actions.logoutSuccess());
     toast.success(response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.logoutFailed());
-    toast.error(error.response.data.message);
-    dispatch(userSlice.actions.clearAllErrors());
+    toast.error(error.response?.data?.message || "Logout failed.");
   }
 };
 
 export const fetchUser = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchUserRequest());
+  const token = getToken();
   try {
-    const response = await axios.get("https://auction-app-zm73.onrender.com/api/v1/user/me", {
-      withCredentials: true,
+    const response = await axios.get(`${API_URL}/user/me`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(response.data); // For debugging
     dispatch(userSlice.actions.fetchUserSuccess(response.data.user));
-  dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.fetchUserFailed());
-    dispatch(userSlice.actions.clearAllErrors());
-    console.error(error.response?.data || error.message); // For debugging
+    toast.error(error.response?.data?.message || "Failed to fetch user.");
   }
 };
-
 
 export const fetchLeaderboard = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchLeaderboardRequest());
+  const token = getToken();
   try {
-    const response = await axios.get(
-      "https://auction-app-zm73.onrender.com/api/v1/user/leaderboard",
-      {
-        withCredentials: true,
-      }
-    );
-    dispatch(
-      userSlice.actions.fetchLeaderboardSuccess(response.data.leaderboard)
-    );
-    dispatch(userSlice.actions.clearAllErrors());
+    const response = await axios.get(`${API_URL}/user/leaderboard`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    dispatch(userSlice.actions.fetchLeaderboardSuccess(response.data.leaderboard));
   } catch (error) {
     dispatch(userSlice.actions.fetchLeaderboardFailed());
-    dispatch(userSlice.actions.clearAllErrors());
-    console.error(error);
+    toast.error(error.response?.data?.message || "Failed to fetch leaderboard.");
   }
 };
 
+// Export reducer
 export default userSlice.reducer;
