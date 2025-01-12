@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const token =  localStorage.getItem("token");
 const commissionSlice = createSlice({
   name: "commission",
   initialState: {
@@ -29,6 +30,7 @@ export const postCommissionProof = (data) => async (dispatch) => {
       {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
     dispatch(commissionSlice.actions.postCommissionProofSuccess());
