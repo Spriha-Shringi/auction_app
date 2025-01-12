@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const getToken = () => localStorage.getItem("token"); // Fetch token dynamically
+const getToken = () => localStorage.getItem("token");
 
 const auctionSlice = createSlice({
   name: "auction",
@@ -15,6 +15,16 @@ const auctionSlice = createSlice({
     allAuctions: [],
   },
   reducers: {
+    getAllAuctionItemRequest(state) {
+      state.loading = true;
+    },
+    getAllAuctionItemSuccess(state, action) {
+      state.loading = false;
+      state.allAuctions = action.payload;
+    },
+    getAllAuctionItemFailed(state) {
+      state.loading = false;
+    },
     createAuctionRequest(state) {
       state.loading = true;
     },
@@ -24,7 +34,6 @@ const auctionSlice = createSlice({
     createAuctionFailed(state) {
       state.loading = false;
     },
-    // Other reducers remain unchanged...
   },
 });
 
@@ -36,12 +45,15 @@ export const getAllAuctionItems = () => async (dispatch) => {
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/allitems",
       {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     dispatch(auctionSlice.actions.getAllAuctionItemSuccess(response.data.items));
   } catch (error) {
     dispatch(auctionSlice.actions.getAllAuctionItemFailed());
+    console.error("Error in getAllAuctionItems:", error.response?.data || error.message);
     toast.error(error.response?.data?.message || "Failed to fetch auction items.");
   }
 };
@@ -56,20 +68,18 @@ export const createAuction = (data) => async (dispatch) => {
       {
         withCredentials: true,
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );
     dispatch(auctionSlice.actions.createAuctionSuccess());
     toast.success(response.data.message);
-    dispatch(getAllAuctionItems());
   } catch (error) {
     dispatch(auctionSlice.actions.createAuctionFailed());
+    console.error("Error in createAuction:", error.response?.data || error.message);
     toast.error(error.response?.data?.message || "Failed to create auction.");
   }
 };
-
-// Similarly, update other actions like getAuctionDetail, deleteAuction, etc.
 
 export default auctionSlice.reducer;
