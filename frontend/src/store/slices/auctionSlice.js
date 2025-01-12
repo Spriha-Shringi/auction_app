@@ -92,7 +92,9 @@ export const getAllAuctionItems = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/allitems",
-      { withCredentials: true }
+      { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(
       auctionSlice.actions.getAllAuctionItemSuccess(response.data.items)
@@ -110,7 +112,9 @@ export const getMyAuctionItems = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/myitems",
-      { withCredentials: true }
+       { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(auctionSlice.actions.getMyAuctionsSuccess(response.data.items));
     dispatch(auctionSlice.actions.resetSlice());
@@ -126,7 +130,9 @@ export const getAuctionDetail = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/auction/${id}`,
-      { withCredentials: true }
+      { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(auctionSlice.actions.getAuctionDetailSuccess(response.data));
     dispatch(auctionSlice.actions.resetSlice());
@@ -190,9 +196,9 @@ export const deleteAuction = (id) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/delete/${id}`,
-      {
-        withCredentials: true,
-      }
+       { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(auctionSlice.actions.deleteAuctionItemSuccess());
     toast.success(response.data.message);
