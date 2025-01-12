@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const token =  localStorage.getItem("token");
 const auctionSlice = createSlice({
   name: "auction",
   initialState: {
@@ -92,9 +91,7 @@ export const getAllAuctionItems = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/allitems",
-       { withCredentials: true
-      headers: { Authorization: `Bearer ${token}` },
-        }
+      { withCredentials: true }
     );
     dispatch(
       auctionSlice.actions.getAllAuctionItemSuccess(response.data.items)
@@ -112,9 +109,7 @@ export const getMyAuctionItems = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/myitems",
-       { withCredentials: true
-      headers: { Authorization: `Bearer ${token}` },
-        }
+      { withCredentials: true }
     );
     dispatch(auctionSlice.actions.getMyAuctionsSuccess(response.data.items));
     dispatch(auctionSlice.actions.resetSlice());
@@ -130,9 +125,7 @@ export const getAuctionDetail = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/auction/${id}`,
-      { withCredentials: true
-      headers: { Authorization: `Bearer ${token}` },
-        }
+      { withCredentials: true }
     );
     dispatch(auctionSlice.actions.getAuctionDetailSuccess(response.data));
     dispatch(auctionSlice.actions.resetSlice());
@@ -152,8 +145,6 @@ export const createAuction = (data) => async (dispatch) => {
       {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
-        headers: { Authorization: `Bearer ${token}` },
-
       }
     );
     dispatch(auctionSlice.actions.createAuctionSuccess());
@@ -176,7 +167,6 @@ export const republishAuction = (id, data) => async (dispatch) => {
       {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
-        headers: { Authorization: `Bearer ${token}` },
       }
     );
     dispatch(auctionSlice.actions.republishItemSuccess());
@@ -199,7 +189,6 @@ export const deleteAuction = (id) => async (dispatch) => {
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/delete/${id}`,
       {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${token}` },
       }
     );
     dispatch(auctionSlice.actions.deleteAuctionItemSuccess());
