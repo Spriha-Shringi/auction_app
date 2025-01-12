@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getAuctionDetail } from "./auctionSlice";
 
+
 const token =  localStorage.getItem("token");
 const bidSlice = createSlice({
   name: "bid",
