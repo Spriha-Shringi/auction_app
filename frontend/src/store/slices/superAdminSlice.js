@@ -196,8 +196,7 @@ export const updatePaymentProof = (id, status, amount) => async (dispatch) => {
       https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/status/update/${id},
       { status, amount },
       { withCredentials: true, 
-      headers: { "Content-Type": "application/json" } ,
-      headers: { Authorization: Bearer ${token} },
+      headers: { "Content-Type": "application/json" , Authorization: Bearer ${token} },
   }
     );
     dispatch(superAdminSlice.actions.successForUpdatePaymentProof());
