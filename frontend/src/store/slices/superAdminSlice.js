@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { getAllAuctionItems } from "./auctionSlice";
 
+const token =  localStorage.getItem("token");
 const superAdminSlice = createSlice({
   name: "superAdmin",
   initialState: {
@@ -108,7 +109,9 @@ export const getMonthlyRevenue = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/monthlyincome",
-      { withCredentials: true }
+       { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(
       superAdminSlice.actions.successForMonthlyRevenue(
@@ -126,7 +129,9 @@ export const getAllUsers = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/users/getall",
-      { withCredentials: true }
+       { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(superAdminSlice.actions.successForAllUsers(response.data));
   } catch (error) {
@@ -140,7 +145,9 @@ export const getAllPaymentProofs = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproofs/getall",
-      { withCredentials: true }
+      { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(
       superAdminSlice.actions.successForPaymentProofs(
@@ -158,7 +165,9 @@ export const deletePaymentProof = (id) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/delete/${id}`,
-      { withCredentials: true }
+      { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(superAdminSlice.actions.successForDeletePaymentProof());
     dispatch(getAllPaymentProofs());
@@ -175,7 +184,9 @@ export const getSinglePaymentProofDetail = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/${id}`,
-      { withCredentials: true }
+       { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(
       superAdminSlice.actions.successForSinglePaymentProofDetail(
@@ -194,7 +205,7 @@ export const updatePaymentProof = (id, status, amount) => async (dispatch) => {
     const response = await axios.put(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/status/update/${id}`,
       { status, amount },
-      { withCredentials: true, headers: { "Content-Type": "application/json" } }
+      { withCredentials: true, headers: { "Content-Type": "application/json" }, headers: { Authorization: `Bearer ${token}` }, }
     );
     dispatch(superAdminSlice.actions.successForUpdatePaymentProof());
     toast.success(response.data.message);
@@ -212,7 +223,9 @@ export const deleteAuctionItem = (id) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/auctionitem/delete/${id}`,
-      { withCredentials: true }
+      { withCredentials: true 
+         headers: { Authorization: `Bearer ${token}` },
+}
     );
     dispatch(superAdminSlice.actions.successForAuctionItemDelete());
     toast.success(response.data.message);
