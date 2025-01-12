@@ -169,6 +169,7 @@ export const republishAuction = (id, data) => async (dispatch) => {
       {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${token}` },
       }
     );
     dispatch(auctionSlice.actions.republishItemSuccess());
