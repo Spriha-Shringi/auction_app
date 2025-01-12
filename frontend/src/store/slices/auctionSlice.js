@@ -34,17 +34,32 @@ const auctionSlice = createSlice({
     getAllAuctionItemFailed(state) {
       state.loading = false;
     },
-    // Other reducers...
+    getAuctionDetailRequest(state) {
+      state.loading = true;
+    },
+    getAuctionDetailSuccess(state, action) {
+      state.loading = false;
+      state.auctionDetail = action.payload.auctionItem;
+      state.auctionBidders = action.payload.bidders;
+    },
+    getAuctionDetailFailed(state) {
+      state.loading = false;
+    },
+    resetSlice(state) {
+      state.loading = false;
+    },
   },
 });
 
 export const getAllAuctionItems = () => async (dispatch) => {
   dispatch(auctionSlice.actions.getAllAuctionItemRequest());
+  const token = getToken();
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/auctionitem/allitems",
       {
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       }
     );
     dispatch(auctionSlice.actions.getAllAuctionItemSuccess(response.data.items));
@@ -54,6 +69,6 @@ export const getAllAuctionItems = () => async (dispatch) => {
   }
 };
 
-// Similarly update other actions like createAuction, getAuctionDetail...
+// Apply the same logic for createAuction, getAuctionDetail, etc.
 
 export default auctionSlice.reducer;
