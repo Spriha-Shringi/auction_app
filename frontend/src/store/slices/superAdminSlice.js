@@ -109,7 +109,7 @@ export const getMonthlyRevenue = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/monthlyincome",
-       { withCredentials: true 
+       { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
@@ -129,7 +129,7 @@ export const getAllUsers = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/users/getall",
-       { withCredentials: true 
+       { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
@@ -145,7 +145,7 @@ export const getAllPaymentProofs = () => async (dispatch) => {
   try {
     const response = await axios.get(
       "https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproofs/getall",
-      { withCredentials: true 
+      { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
@@ -165,7 +165,7 @@ export const deletePaymentProof = (id) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/delete/${id}`,
-      { withCredentials: true 
+      { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
@@ -184,7 +184,7 @@ export const getSinglePaymentProofDetail = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/paymentproof/${id}`,
-       { withCredentials: true 
+       { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
@@ -223,7 +223,7 @@ export const deleteAuctionItem = (id) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://auction-app-sprihashringis-projects.vercel.app/api/v1/superadmin/auctionitem/delete/${id}`,
-      { withCredentials: true 
+      { withCredentials: true, 
          headers: { Authorization: `Bearer ${token}` },
 }
     );
